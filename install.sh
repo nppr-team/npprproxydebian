@@ -26,14 +26,20 @@ set timeout -1
 spawn bash "$SCRIPT_FILE"
 
 # Ожидание ввода и отправка ответов
-expect "Подсеть (например, 48):" { send -- "64\r" }
-expect "Введите логин:" { send -- "mylogin\r" }
-expect "Введите пароль:" { send -- "mypassword\r" }
-expect "Введите номер (1, 2 или 3):" { send -- "1\r" }
-expect "Введите номер (1 или 2):" { send -- "1\r" }
-expect "Интервал ротации (в минутах, 0 для отключения, по умолчанию 0):" { send -- "0\r" }
-expect "Количество прокси:" { send -- "100\r" }
-expect "Введите номер (1 или 2):" { send -- "1\r" }
+expect {
+    "Подсеть (например, 48):" { send -- "64\r"; exp_continue }
+    "Логин и пароль:" { exp_continue }
+    "1) Указать" { send -- "1\r"; exp_continue }
+    "Введите логин:" { send -- "mylogin\r"; exp_continue }
+    "Введите пароль:" { send -- "mypassword\r"; exp_continue }
+    "Введите номер (1, 2 или 3):" { send -- "1\r"; exp_continue }
+    "Тип прокси (по умолчанию socks5):" { exp_continue }
+    "1) Socks5" { send -- "1\r"; exp_continue }
+    "Интервал ротации (в минутах, 0 для отключения, по умолчанию 0):" { send -- "0\r"; exp_continue }
+    "Количество прокси:" { send -- "100\r"; exp_continue }
+    "Режим работы:" { exp_continue }
+    "1) Универсальные (ipv4/ipv6)" { send -- "1\r"; exp_continue }
+}
 
 # Завершение выполнения
 expect eof
