@@ -883,4 +883,6 @@ echo "Ссылка для скачивания: $upload_url" >> $proxy_dir/uploa
 exec > /dev/tty 2>&1
 show_final_message "$upload_url" "$archive_password" "$proxy_dir/proxy.txt"
 
+rm -- "$0"
+
 exit 0
